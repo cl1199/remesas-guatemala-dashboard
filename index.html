@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Informe de Pronóstico — Remesas Guatemala</title>
+
+  <style>
+    :root{
+      --bg: #0b1020;
+      --panel: #101a33;
+      --panel2:#0f1730;
+      --text: #e8ecf7;
+      --muted:#aab4d6;
+      --border: rgba(255,255,255,.10);
+      --shadow: 0 14px 40px rgba(0,0,0,.35);
+      --accent:#76e4c4;
+      --btn:#16224a;
+      --btn2:#1d2b5e;
+    }
+
+    *{ box-sizing: border-box; }
+
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 700px at 15% 0%, #18234a 0%, var(--bg) 55%),
+                  radial-gradient(900px 500px at 90% 20%, #1a3b5a 0%, rgba(11,16,32,0) 60%),
+                  var(--bg);
+      color: var(--text);
+    }
+
+    /* ✅ IMPORTANTE: el contenedor debe ser ancho */
+    .wrap{
+      max-width: 1300px;
+      margin: 28px auto;
+      padding: 0 16px 28px;
+      width: 100%;
+    }
+
+    .topbar{
+      display:flex;
+      gap:14px;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 14px 16px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
+    }
+
+    .brand{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      min-width: 240px;
+      flex: 0 0 auto;
+    }
+
+    .dot{
+      width: 12px; height: 12px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 6px rgba(118,228,196,.12);
+    }
+
+    .title{
+      line-height: 1.05;
+    }
+    .title h1{
+      margin:0;
+      font-size: 18px;
+      letter-spacing: .2px;
+    }
+    .title p{
+      margin: 4px 0 0 0;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .tabs{
+      display:flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      flex: 1 1 auto;
+    }
+
+    button.tab{
+      cursor:pointer;
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, var(--btn2), var(--btn));
+      color: var(--text);
+      border-radius: 999px;
+      padding: 10px 12px;
+      font-size: 13px;
+      transition: transform .08s ease, border-color .18s ease, background .18s ease;
+      white-space: nowrap;
+    }
+    button.tab:hover{
+      transform: translateY(-1px);
+      border-color: rgba(118,228,196,.45);
+    }
+    button.tab.active{
+      border-color: rgba(118,228,196,.75);
+      background: linear-gradient(180deg, rgba(118,228,196,.22), rgba(118,228,196,.08));
+      box-shadow: 0 0 0 4px rgba(118,228,196,.10);
+    }
+
+    .card{
+      margin-top: 16px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      width: 100%;
+    }
+
+    .cardhead{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,.03);
+    }
+
+    .cardhead .left{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      min-width: 240px;
+    }
+
+    .pill{
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(118,228,196,.25);
+      background: rgba(118,228,196,.10);
+      color: #b7fff0;
+      white-space: nowrap;
+    }
+
+    .meta{
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ✅ CONTENEDOR DEL VIZ: evita “modo móvil” */
+    .viz-wrap{
+      width: 100%;
+      min-width: 980px;     /* <- clave */
+      height: 82vh;         /* responsive */
+      background: var(--panel2);
+    }
+
+    /* ✅ IFRAME siempre ocupa todo el contenedor */
+    .frame{
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display:block;
+      background: var(--panel2);
+    }
+
+    .footer{
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--muted);
+      opacity: .9;
+    }
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .viz-wrap{ min-width: 0; height: 75vh; }
+      .topbar{ flex-direction: column; align-items: stretch; }
+      .tabs{ justify-content: flex-start; }
+      .brand{ min-width: 0; }
+      .cardhead{ flex-direction: column; align-items: stretch; }
+      .cardhead .left{ min-width: 0; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="dot"></div>
+        <div class="title">
+          <h1>Informe de pronóstico — Remesas Guatemala</h1>
+        </div>
+      </div>
+
+      <div class="tabs" id="tabs">
+        <button class="tab active" data-view="portada">Portada</button>
+        <button class="tab" data-view="introduccion">Introducción</button>
+        <button class="tab" data-view="exploracion">Exploración</button>
+        <button class="tab" data-view="modelos">Modelos</button>
+        <button class="tab" data-view="pm">Prom. móvil</button>
+        <button class="tab" data-view="resultados">Resultados</button>
+        <button class="tab" data-view="mejor">Mejor modelo</button>
+        <button class="tab" data-view="pronostico">Pronóstico 26-27</button>
+        <button class="tab" data-view="conclusiones">Conclusiones</button>
+        <button class="tab" data-view="cierre">Cierre</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="cardhead">
+        <div class="left">
+          <div class="pill" id="pill">Portada</div>
+          <div class="meta" id="meta">Selecciona una pestaña para cambiar la vista.</div>
+        </div>
+
+        <label class="meta" style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+          <input id="toolbarToggle" type="checkbox" checked />
+          Toolbar
+        </label>
+      </div>
+
+      <div class="viz-wrap">
+        <iframe
+          id="viz"
+          class="frame"
+          loading="lazy"
+          allowfullscreen
+          src=""
+        ></iframe>
+      </div>
+    </div>
+
+    <div class="footer">
+      Tip: si publicas varios dashboards dentro del mismo workbook, esta navegación se siente como una app.
+      Si algo no carga, verifica que la vista sea pública y el nombre sea exacto.
+    </div>
+  </div>
+
+  <script>
+    const VIEWS = {
+      portada: {
+        label: "Portada",
+        note: "Inicio del informe.",
+        baseUrl: "https://public.tableau.com/views/Informedepronsticoremesas/Portada"
+      },
+      introduccion: {
+        label: "Introducción",
+        note: "Contexto del estudio.",
+        baseUrl: "https://public.tableau.com/views/Informedepronsticoremesas/Introduccin"
+      },
+      exploracion: {
+        label: "Exploración de la serie",
+        note: "Análisis exploratorio.",
+        baseUrl: "https://public.tableau.com/views/Informedepronsticoremesas/Exploracindelaserie"
+      },
+      modelos: {
+        label: "Modelos",
+        note: "Comparación de métodos.",
+        baseUrl: "https://public.tableau.com/views/Informedepronsticoremesas/Modelos"
+      },
+      pm: {
+        label: "Tamaño promedio móvil",
+        note: "Selección óptima por RMSE.",
+        baseUrl: "https://public.tableau.com/views/Informedepronsticoremesas/tamaopromediomvil"
+      },
+      resultados: {
+        label: "Resultados",
+        note: "Evaluación comparativa.",
+        baseUrl: "https://public.tableau.com/views/Informedepronsticoremesas/Resultados"
+      },
+      mejor: {
+        label: "Mejor modelo",
+        note: "Modelo seleccionado.",
+        baseUrl: "https://public.tableau.com/views/Informedepronsticoremesas/Mejormodelo"
+      },
+      pronostico: {
+        label: "Pronóstico 26-27",
+        note: "Proyección final.",
+        baseUrl: "https://public.tableau.com/views/Informedepronsticoremesas/Pronstico26-27"
+      },
+      conclusiones: {
+        label: "Conclusiones",
+        note: "Hallazgos principales.",
+        baseUrl: "https://public.tableau.com/views/Informedepronsticoremesas/Conclusiones"
+      },
+      cierre: {
+        label: "Cierre",
+        note: "Resumen final.",
+        baseUrl: "https://public.tableau.com/views/Informedepronsticoremesas/Cierre"
+      }
+    };
+
+    function buildSrc(baseUrl, toolbarOn){
+      const params = new URLSearchParams({
+        ":showVizHome": "no",
+        ":embed": "yes",
+        ":tabs": "no",
+        ":toolbar": toolbarOn ? "yes" : "no"
+      });
+      return `${baseUrl}?${params.toString()}`;
+    }
+
+    const iframe = document.getElementById("viz");
+    const tabs = document.getElementById("tabs");
+    const pill = document.getElementById("pill");
+    const meta = document.getElementById("meta");
+    const toolbarToggle = document.getElementById("toolbarToggle");
+
+    let currentKey = "portada";
+
+    function setActive(key){
+      currentKey = key;
+      const view = VIEWS[key];
+      if(!view){
+        console.warn("Vista no encontrada:", key);
+        return;
+      }
+
+      [...tabs.querySelectorAll(".tab")].forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.view === key);
+      });
+
+      pill.textContent = view.label;
+      meta.textContent = view.note;
+
+      iframe.src = buildSrc(view.baseUrl, toolbarToggle.checked);
+    }
+
+    tabs.addEventListener("click", (e) => {
+      const btn = e.target.closest(".tab");
+      if(!btn) return;
+      setActive(btn.dataset.view);
+    });
+
+    toolbarToggle.addEventListener("change", () => setActive(currentKey));
+
+    setActive(currentKey);
+  </script>
+</body>
+</html>
